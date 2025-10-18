@@ -2,8 +2,11 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 
 const profileRouter = require('./src/routes/profile.routes');
+const { errorHandler, notFound } = require('./src/middlewares/errorHandler.middlewares');
+const { requestLogger, errorLogger } = require('./src/middlewares/logger.middlewares');
 
 const app = express();
 const PORT = process.env.PORT || 5080;
@@ -12,8 +15,26 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 // ==============================
 // =======-MIDDLEWARE-===========
 // ==============================
+const corsOptions = {
+    origin: process.env.ALLOWED_ORIGINS || '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+};
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    message: {
+        status: "error",
+        message: "Too many requests from this IP"
+    },
+});
+
+app.use(helmet());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(requestLogger);
 
 // ==============================
 // =========-ROUTE-==============
@@ -21,13 +42,15 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/api', (req, res) => {
   res.send('Hello, World!');
 });
-
-app.use('/api', profileRouter); // /me endpoint
+app.use('/api', limiter);
+app.use('/api', profileRouter); // '/me' endpoint
 
 // ===============================
 // ======-Error Handler-==========
 // ===============================
-
+app.use(notFound);
+app.use(errorHandler);
+app.use(errorLogger);
 
 // ==============================
 // =========-SERVER-=============
@@ -86,3 +109,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+module.exports = app;
