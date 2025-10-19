@@ -59,21 +59,21 @@ const startServer = async () => {
     try {
         console.log('');
         console.log('='.repeat(50));
-        console.log('🚀 Starting Server...');
+        console.log(' Starting Server...');
         console.log('='.repeat(50));
         console.log('');        
         console.log('='.repeat(50));
-        console.log("🚀  Dynamic Profile Endpoint - Stage 0 API");
+        console.log("  Dynamic Profile Endpoint - Stage 0 API");
         console.log("=".repeat(50));
         console.log('');
         
         const server = app.listen(PORT, () => {
             console.log('='.repeat(50));
-            console.log(`📡 Server running on port ${PORT}`);
-            console.log(`🌍 Environment: ${NODE_ENV}`);
-            console.log(`🔗 API URL: http://localhost:${PORT}/api`);
-            console.log(`📍 Profile Endpoint: http://localhost:${PORT}/api/me`);
-            console.log(`💚 Health Check: http://localhost:${PORT}/api/health`);
+            console.log(` Server running on port ${PORT}`);
+            console.log(` Environment: ${NODE_ENV}`);
+            console.log(` API URL: http://localhost:${PORT}/api`);
+            console.log(` Profile Endpoint: http://localhost:${PORT}/api/me`);
+            console.log(` Health Check: http://localhost:${PORT}/api/health`);
             console.log('='.repeat(50));
             console.log('');
 
@@ -99,7 +99,7 @@ const startServer = async () => {
     } catch (error) {
         console.error('');
         console.error('='.repeat(60));
-        console.error('❌ Failed to start server');
+        console.error(' Failed to start server');
         console.error('='.repeat(60));
         console.error('');
         console.error('Error:', error.message);
